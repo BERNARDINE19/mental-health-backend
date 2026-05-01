@@ -10,27 +10,21 @@ def home():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json()
-    msg = data.get("message", "")
+    try:
+        data = request.get_json()
+        msg = data.get("message", "")
 
-    if "sad" in msg:
-        reply = "I'm here for you. Try talking to someone."
-    elif "pain" in msg:
-        reply = "It might be stress. Drink warm water and rest."
-    else:
-        reply = "Tell me more about how you're feeling."
+        if "sad" in msg.lower():
+            reply = "I'm here for you. Try talking to someone."
+        elif "pain" in msg.lower():
+            reply = "It might be stress. Drink warm water and rest."
+        else:
+            reply = "Tell me more about how you're feeling."
 
-    return jsonify({"reply": reply})
+        return jsonify({"reply": reply})
+
+    except Exception as e:
+        return jsonify({"reply": str(e)})
 
 if __name__ == "__main__":
     app.run()
-    
-        return jsonify({"object": str(e)})
-
-
-# ---------------- RUN ----------------
-import os
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
