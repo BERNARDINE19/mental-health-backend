@@ -1,43 +1,36 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-CORS(app, resources={r"/*": {"origins": "*"}})
 
+# ✅ CREATE APP FIRST
 app = Flask(__name__)
 
-# 🔥 FIX CORS (IMPORTANT)
+# ✅ THEN APPLY CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-@app.route("/")
+# ✅ TEST ROUTE
+@app.route("/", methods=["GET"])
 def home():
     return "Backend Live 🚀"
 
+# ✅ CHAT API
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
         data = request.get_json()
 
-        if not data:
-            return jsonify({"reply": "No data received"})
+        if not data or "message" not in data:
+            return jsonify({"reply": "Invalid request"}), 400
 
-        msg = data.get("message", "")
+        user_msg = data["message"]
 
-        print("MESSAGE RECEIVED:", msg)  # debug log
-
-        if "hello" in msg.lower():
-            reply = "Hello! How can I help you?"
-        elif "sad" in msg.lower():
-            reply = "I'm here for you. Try talking to someone."
-        elif "pain" in msg.lower():
-            reply = "It might be stress. Drink warm water and rest."
-        else:
-            reply = "Tell me more."
-
-        return jsonify({"reply": reply})
+        # ✅ SIMPLE RESPONSE (FOR DEMO)
+        return jsonify({
+            "reply": f"Hello! You said: {user_msg}"
+        })
 
     except Exception as e:
-        print("ERROR:", e)
-        return jsonify({"reply": str(e)})
+        return jsonify({"reply": str(e)}), 500
 
-# 🔥 IMPORTANT FOR RENDER
+# ✅ IMPORTANT FOR LOCAL RUN (Render uses gunicorn)
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=5000)
