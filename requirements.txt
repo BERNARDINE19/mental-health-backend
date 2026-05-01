@@ -1,13 +1,3 @@
 flask
 flask-cors
-python-dotenv
-requests
-certifi
-spotipy
-
-# AI + Vision
-ultralytics
-opencv-python
-
-# (optional - if you still use it somewhere)
-openai
+gunicorn
